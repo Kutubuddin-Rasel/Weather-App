@@ -1,13 +1,9 @@
 package com.example.weatherapp.ViewModel
 
-import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.Repository.WeatherRepository
-import com.example.weatherapp.Retrofit.API
-import com.example.weatherapp.WeatherApi.NetworkResponse
-import com.example.weatherapp.WeatherApi.WeatherApi
+import com.example.weatherapp.Retrofit.Constant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -21,7 +17,7 @@ class WeatherViewModel(private val  weatherRepository: WeatherRepository):ViewMo
     val weather = weatherRepository.weather
     fun getweather(city:String) {
         viewModelScope.launch(Dispatchers.IO) {
-           val data =weatherRepository.getWeather(API.api,city)
+           val data =weatherRepository.getWeather(Constant.api,city)
         }
     }
 }

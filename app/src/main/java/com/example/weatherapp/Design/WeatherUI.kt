@@ -45,7 +45,6 @@ import com.example.weatherapp.WeatherApi.WeatherApi
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun WeatherUI(weatherViewModel: WeatherViewModel, modifier: Modifier) {
     val city = weatherViewModel.city.collectAsState().value
