@@ -19,16 +19,20 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -48,8 +52,11 @@ import com.example.weatherapp.WeatherApi.WeatherApi
 @Composable
 fun WeatherUI(weatherViewModel: WeatherViewModel, modifier: Modifier) {
     val city = weatherViewModel.city.collectAsState().value
-    val weatherReasult = weatherViewModel.weather.collectAsState().value
+    val weatherReasult = weatherViewModel.weather.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
+    val loadingvalue = remember {
+        mutableStateOf(false)
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -95,7 +102,10 @@ fun WeatherUI(weatherViewModel: WeatherViewModel, modifier: Modifier) {
                 IconButton(onClick = {
                     weatherViewModel.getweather(city)
                     keyboardController?.hide()
-                }) {
+                    loadingvalue.value = true
+                }
+                )
+                {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search",
@@ -103,8 +113,16 @@ fun WeatherUI(weatherViewModel: WeatherViewModel, modifier: Modifier) {
                     )
                 }
             }
-            if (weatherReasult != null) {
-                weatherDetails(weatherReasult)
+            if (loadingvalue.value && weatherReasult.value == null) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(top=120.dp)
+                        .size(60.dp),
+                    color = Color.White
+                )
+            }
+            if (weatherReasult.value != null) {
+                weatherDetails(weatherReasult.value)
             }
         }
     }
@@ -164,7 +182,9 @@ private fun weatherDetails(weatherReasult: WeatherApi?) {
             Column {
                 Card(
                     elevation = CardDefaults.elevatedCardElevation(8.dp),
-                    modifier = Modifier.padding(10.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f)
                 )
                 {
                     Column(
