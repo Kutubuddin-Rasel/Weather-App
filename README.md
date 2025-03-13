@@ -1,4 +1,4 @@
-# WeatherApp
+# ClimaCast
 
 WeatherApp is an Android application built with Kotlin that allows users to get current weather information for any city or country. By integrating with WeatherAPI, the app provides real-time data including temperature (in Celsius), current weather conditions, humidity, wind speed, UV index, and more—all displayed in an easy-to-read format.
 
